@@ -7,6 +7,7 @@ venv/
 
 # Local model and benchmark artifacts
 .cache/
+artifacts/
 huggingface-cache/
 outputs/
 *.jsonl
