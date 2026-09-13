@@ -9,6 +9,7 @@ import statistics
 import time
 
 import torch
+import transformers
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
@@ -43,13 +44,15 @@ def main() -> None:
     device = torch.device("cuda")
     print(f"GPU: {torch.cuda.get_device_name(0)}")
     print(f"PyTorch: {torch.__version__}")
+    print(f"CUDA runtime: {torch.version.cuda}")
+    print(f"Transformers: {transformers.__version__}")
     print(f"Model: {args.model}")
 
     load_start = time.perf_counter()
     tokenizer = AutoTokenizer.from_pretrained(args.model)
     model = AutoModelForCausalLM.from_pretrained(
         args.model,
-        torch_dtype=torch.float16,
+        dtype=torch.float16,
         device_map="auto",
         low_cpu_mem_usage=True,
     )
@@ -81,6 +84,10 @@ def main() -> None:
 
     print(f"Input tokens: {input_tokens}")
     print(f"Max new tokens: {args.max_new_tokens}")
+    print(f"Warmup runs: {args.warmup_runs}")
+    print(f"Measured runs: {args.runs}")
+    print("Batch size: 1")
+    print("Precision: FP16")
     print(f"Loading seconds: {load_seconds:.2f}")
 
     with torch.inference_mode():
@@ -118,6 +125,8 @@ def main() -> None:
     print("\nSummary")
     print(f"Mean latency: {mean_latency:.3f}s")
     print(f"Median latency: {statistics.median(latencies):.3f}s")
+    if len(latencies) > 1:
+        print(f"Latency standard deviation: {statistics.stdev(latencies):.3f}s")
     print(f"Mean generated tokens: {mean_generated:.1f}")
     print(f"Mean generation throughput: {mean_generated / mean_latency:.2f} tokens/s")
     print(f"Peak allocated GPU memory: {peak_memory_gb:.2f} GiB")
