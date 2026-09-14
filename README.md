@@ -9,6 +9,7 @@ and serving the optimized model through NVIDIA Triton Inference Server.
 - [x] Establish a reproducible Hugging Face/PyTorch FP16 baseline.
 - [x] Benchmark a TensorRT-LLM FP16 engine to isolate runtime/compiler gains.
 - [ ] Benchmark TensorRT-LLM FP8 to isolate the effect of quantization.
+- [x] Scaffold the pinned Triton model repository and endpoint client.
 - [ ] Serve the selected engine through Triton.
 - [ ] Connect a minimal application to the Triton endpoint.
 
@@ -101,3 +102,12 @@ driver. Its CUDA forward-compatibility library failed on the consumer RTX 4090
 with error 804. The pinned Triton container uses CUDA 12.8, and
 `scripts/runpod_env.sh` places RunPod's host-mounted driver library before any
 incompatible forward-compatibility library.
+
+## Phase 3 serving scaffold
+
+Phase 3 starts with a functional deployment of the validated FP16 engine before
+changing engine shapes or introducing concurrent load. The setup, launch,
+smoke-test, and minimal chat commands are documented in
+[`phase3/README.md`](phase3/README.md). The two remaining status items above stay
+unchecked until the service and chat client have been exercised on the RunPod
+GPU.
