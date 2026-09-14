@@ -8,7 +8,7 @@ from triton_client import TritonClient
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--url", default="http://localhost:8000")
-    parser.add_argument("--max-tokens", type=int, default=96)
+    parser.add_argument("--max-tokens", type=int, default=128)
     return parser.parse_args()
 
 

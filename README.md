@@ -10,8 +10,8 @@ and serving the optimized model through NVIDIA Triton Inference Server.
 - [x] Benchmark a TensorRT-LLM FP16 engine to isolate runtime/compiler gains.
 - [ ] Benchmark TensorRT-LLM FP8 to isolate the effect of quantization.
 - [x] Scaffold the pinned Triton model repository and endpoint client.
-- [ ] Serve the selected engine through Triton.
-- [ ] Connect a minimal application to the Triton endpoint.
+- [x] Serve the selected engine through Triton.
+- [x] Connect a minimal application to the Triton endpoint.
 
 ## Phase 1 baseline
 
@@ -108,6 +108,5 @@ incompatible forward-compatibility library.
 Phase 3 starts with a functional deployment of the validated FP16 engine before
 changing engine shapes or introducing concurrent load. The setup, launch,
 smoke-test, and minimal chat commands are documented in
-[`phase3/README.md`](phase3/README.md). The two remaining status items above stay
-unchecked until the service and chat client have been exercised on the RunPod
-GPU.
+[`phase3/README.md`](phase3/README.md). The service and chat client were
+exercised successfully on the RunPod GPU on September 13, 2026.

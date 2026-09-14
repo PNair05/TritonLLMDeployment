@@ -47,6 +47,19 @@ python phase3/chat.py
 The smoke test must report both the server and ensemble model as ready, then
 print a generated response.
 
+## Verified result
+
+The deployment was verified on September 13, 2026, using the same RTX 4090 and
+pinned Triton 25.03 container as the controlled benchmark. Triton's server and
+`ensemble` readiness endpoints both returned HTTP 200. The smoke test produced
+a complete response, and the terminal chat successfully sent a user prompt
+through the ensemble and displayed generated text.
+
+The original chat default of 96 output tokens could cut off longer answers. It
+is now 128 tokens, the maximum output length used by this engine build. This
+reduces truncation but does not remove the engine's 128-token input and
+256-token total-sequence limits.
+
 ## Access from outside the pod
 
 The safest development option is an SSH tunnel that maps your computer's port
