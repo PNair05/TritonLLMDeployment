@@ -60,6 +60,9 @@ is now 128 tokens, the maximum output length used by this engine build. This
 reduces truncation but does not remove the engine's 128-token input and
 256-token total-sequence limits.
 
+See the [captured smoke-test and chat transcript](../docs/demo.md) for the
+verified CLI behavior.
+
 ## Access from outside the pod
 
 The safest development option is an SSH tunnel that maps your computer's port

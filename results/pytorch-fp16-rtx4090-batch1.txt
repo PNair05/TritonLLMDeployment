@@ -1,0 +1,38 @@
+PYTORCH FP16 BENCHMARK — NORMALIZED CAPTURED RECORD
+Captured: 2026-09-13 on RunPod
+
+This file transcribes the recorded environment, all measured latency samples,
+and summary values. It is not represented as a byte-for-byte raw stdout file;
+the generated sample text is omitted because it is not used in the metrics.
+
+GPU: NVIDIA GeForce RTX 4090
+PyTorch: 2.7.0a0+7c8ec84dab.nv25.03
+CUDA runtime: 12.8
+Transformers: 4.47.1
+Model: mistralai/Mistral-7B-Instruct-v0.3
+Input tokens: 28
+Max new tokens: 128
+Warmup runs: 3
+Measured runs: 10
+Batch size: 1
+Precision: FP16
+Loading seconds: 26.37
+
+Run 01 latency: 3.921s
+Run 02 latency: 3.911s
+Run 03 latency: 3.898s
+Run 04 latency: 3.905s
+Run 05 latency: 3.937s
+Run 06 latency: 3.927s
+Run 07 latency: 3.916s
+Run 08 latency: 3.983s
+Run 09 latency: 3.899s
+Run 10 latency: 3.946s
+
+Summary
+Mean latency: 3.924s
+Median latency: 3.918s
+Latency standard deviation: 0.026s
+Mean generated tokens: 128.0
+Mean generation throughput: 32.62 tokens/s
+Peak allocated GPU memory: 13.53 GiB

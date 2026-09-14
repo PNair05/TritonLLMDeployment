@@ -1,0 +1,25 @@
+TENSORRT-LLM FP16 BENCHMARK — RECORDED SUMMARY
+Captured: 2026-09-13 on the same RunPod as the PyTorch baseline
+
+This is the recorded benchmark summary, not a byte-for-byte raw stdout file.
+The full command output was written on the pod to:
+outputs/trtllm-fp16-rtx4090-batch1.txt
+
+GPU: NVIDIA GeForce RTX 4090
+TensorRT-LLM: 0.18.0
+Engine: artifacts/trtllm/fp16-engine
+Tokenizer: mistralai/Mistral-7B-Instruct-v0.3
+Input tokens: 28
+Max new tokens: 128
+Warmup runs: 3
+Measured runs: 10
+Batch size: 1
+
+Summary
+Engine loading seconds: 40.28
+Mean latency: 2.038s
+Median latency: 2.037s
+Latency standard deviation: 0.001s
+Mean generated tokens: 128.0
+Mean generation throughput: 62.82 tokens/s
+Device memory in use after benchmark: 15.39 GiB

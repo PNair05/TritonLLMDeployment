@@ -95,10 +95,14 @@ This is a startup tradeoff rather than a per-request cost for a persistent
 service. The PyTorch and TensorRT-LLM GPU-memory numbers use different
 measurement scopes and are therefore recorded but not compared directly.
 
-## FP8 follows FP16
+The tracked [`results/`](../results/README.md) directory documents the exact
+workload, formulas, captured baseline samples, optimized summary, and evidence
+provenance behind these values.
 
-Do not build FP8 until the FP16 engine is verified. FP8 requires calibration:
-representative text is passed through the FP16 model to estimate scaling
-ranges that map higher-precision weights and activations into FP8. Calibration
-data affects quality, so its dataset and sample count will be selected and
-documented before quantization.
+## Optional future work: FP8
+
+The FP16 engine is verified; FP8 has not been implemented. FP8 requires
+calibration: representative text is passed through the FP16 model to estimate
+scaling ranges that map higher-precision weights and activations into FP8.
+Calibration data affects quality, so its dataset and sample count will be
+selected and documented before quantization.
