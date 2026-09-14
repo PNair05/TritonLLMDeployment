@@ -34,16 +34,31 @@ The build configuration is intentionally bounded to batch size 1 and a
 128-output-token test. A later Triton serving engine will use a larger shape
 envelope suitable for concurrent requests.
 
+The RunPod used for this experiment had a 41,000,000,000-byte cgroup RAM limit
+(about 38.2 GiB). TensorRT reported a 39.4 GB build-phase peak. Loading the
+Hugging Face model and building in one Python process exhausted that limit.
+The build script therefore converts the cached model shard-by-shard on CPU,
+ends the converter, and replaces itself with `trtllm-build`. This prevents the
+Hugging Face model and TensorRT builder from occupying RAM simultaneously.
+
 ```bash
 cd /workspace/TritonLLMDeployment
 source scripts/runpod_env.sh
 
-python phase2/build_fp16_engine.py \
-  | tee outputs/trtllm-fp16-build.txt
+mkdir -p outputs
+nohup python -u phase2/build_fp16_engine.py \
+  > outputs/trtllm-fp16-build.txt 2>&1 &
+
+tail -f outputs/trtllm-fp16-build.txt
 ```
 
 The saved engine is written to `artifacts/trtllm/fp16-engine` and is ignored
 by Git because it is large and specific to this software/hardware stack.
+
+The intermediate checkpoint is written to
+`artifacts/trtllm/fp16-checkpoint`. Both directories must contain their
+respective `config.json` and rank-zero data file to be considered complete;
+the script refuses to reuse a non-empty partial directory.
 
 ## Benchmark the FP16 engine
 
@@ -62,6 +77,23 @@ TensorRT-LLM preallocates a KV-cache pool, so the script limits that pool to
 10% of otherwise-free device memory for this small batch-one test and labels
 its memory result as total device memory in use rather than PyTorch-allocated
 memory.
+
+## FP16 benchmark result
+
+The same-pod comparison on an RTX 4090 generated exactly 128 new tokens for
+each measured request:
+
+| Metric | PyTorch FP16 | TensorRT-LLM FP16 | Change |
+| --- | ---: | ---: | ---: |
+| Mean latency | 3.924 s | 2.038 s | 48.1% lower |
+| Median latency | 3.918 s | 2.037 s | 48.0% lower |
+| Latency standard deviation | 0.026 s | 0.001 s | 96.2% lower |
+| Generation throughput | 32.62 tokens/s | 62.82 tokens/s | 1.93x |
+
+Engine loading took 40.28 seconds versus 26.37 seconds for the PyTorch model.
+This is a startup tradeoff rather than a per-request cost for a persistent
+service. The PyTorch and TensorRT-LLM GPU-memory numbers use different
+measurement scopes and are therefore recorded but not compared directly.
 
 ## FP8 follows FP16
 
